@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+
 const Novel = require("./controller/novel.js");
 
 app.get("/", (req, res) => {
@@ -69,6 +69,7 @@ app.delete("/novel/:id", (req, res) => {
   }
 });
 
+const port = 3000;
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
