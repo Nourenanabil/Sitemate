@@ -29,5 +29,41 @@ class Novel {
     return new Novel(novel.id, novel.title, novel.description);
   }
 
+  save() {
+    var novels = Novel.all();
+    if (this.id) {
+      novels = novels.map((novel) => {
+        if (novel.id == this.id) {
+          return {
+            id: this.id,
+            title: this.title,
+            description: this.description,
+          };
+        }
+
+        return novel;
+      });
+    } else {
+      novels = [
+        ...novels,
+        {
+          id: this.id,
+          title: this.title,
+          description: this.description,
+        },
+      ];
+    }
+
+    const novelsPath = path.join(__dirname, "../data/novels.json");
+
+    fs.writeFileSync(novelsPath, JSON.stringify(novels));
+  }
+
+  delete() {
+    const novels = Novel.all().filter((n) => n.id != this.id);
+    const novelsPath = path.join(__dirname, "../data/novels.json");
+
+    fs.writeFileSync(novelsPath, JSON.stringify(novels));
+  }
 }
 module.exports = Novel;
