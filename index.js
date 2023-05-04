@@ -37,6 +37,37 @@ app.post("/novels", (req, res) => {
   }
 });
 
+app.patch("/novel/:id", (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const novel = Novel.find(req.params.id);
+    if (!novel) {
+      res.status(404).json({ error: "Novel not found" });
+    } else if (!title || !description) {
+      res.status(400).json({ error: "Missing required fields" });
+    } else {
+      novel.id = req.params.id;
+      novel.title = title;
+      novel.description = description;
+
+      novel.save();
+      res.json(novel);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+app.delete("/novel/:id", (req, res) => {
+  const novel = Novel.find(req.params.id);
+  if (!novel) {
+    res.status(404).json({ error: "Novel not found" });
+  } else {
+    novel.delete();
+    res.json({ message: "Novel deleted successfully" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
